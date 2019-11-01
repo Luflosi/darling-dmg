@@ -115,9 +115,6 @@ int32_t DMGPartition::readRun(void* buf, int32_t runIndex, uint64_t offsetInSect
 			//std::cout << "Raw\n";
 			return m_disk->read(buf, count, be(run->compOffset) + be(m_table->dataStart) + offsetInSector);
 		case RunType::LZFSE:
-#ifndef COMPILE_WITH_LZFSE
-			throw function_not_implemented_error("LZFSE is not yet supported");
-#endif
 		case RunType::Zlib:
 		case RunType::Bzip2:
 		case RunType::ADC:

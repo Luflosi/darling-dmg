@@ -1,9 +1,7 @@
 #include "DMGDecompressor.h"
 #include <zlib.h>
 #include <bzlib.h>
-#ifdef COMPILE_WITH_LZFSE
-	#include <lzfse.h>
-#endif
+#include <lzfse.h>
 #include "adc.h"
 #include <cstring>
 #include <memory>
@@ -67,10 +65,8 @@ DMGDecompressor* DMGDecompressor::create(RunType runType, std::shared_ptr<Reader
 			return new DMGDecompressor_Bzip2(reader);
 		case RunType::ADC:
 			return new DMGDecompressor_ADC(reader);
-#ifdef COMPILE_WITH_LZFSE
 		case RunType::LZFSE:
 			return new DMGDecompressor_LZFSE(reader);
-#endif
 		default:
 			return nullptr;
 	}
@@ -284,8 +280,6 @@ int32_t DMGDecompressor_ADC::decompress(void* output, int32_t count, int64_t off
 	return count;
 }
 
-#ifdef COMPILE_WITH_LZFSE
-
 int32_t DMGDecompressor_LZFSE::decompress(void* output, int32_t outputBytes)
 {
 	// DMGDecompressor can only read by 8k while compressed length of a LZFSE block can be much bigger
@@ -353,5 +347,3 @@ int32_t DMGDecompressor_LZFSE::decompress(void* output, int32_t count, int64_t o
 	done = decompress(output, count);
 	return done;
 }
-
-#endif
